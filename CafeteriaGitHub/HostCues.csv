@@ -1,0 +1,676 @@
+AverageTemp,AverageHumidity,AverageCO2,HostType,Outcome
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Empty
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Chicken
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Chicken
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Chicken
+23.55,40.5,564.6666667,Dog,Empty
+23.2,59.5,478,Dog,Dog
+60,22.35,451.3333333,Dog,Empty
+24.1,50.5,442,Dog,Dog
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Human
+22.15,24.9,417.5,Dog,Human
+NA,NA,NA,Dog,Chicken
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Chicken
+22.4,60,432.3333333,Dog,Chicken
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Chicken
+NA,NA,NA,Dog,No choice
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,No choice
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Empty
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+25.55,78,455,Dog,No choice
+14.55,67.5,492,Dog,Dog
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Human
+NA,NA,NA,Dog,Never left
+23.05,52.5,434.25,Dog,Dog
+NA,NA,NA,Dog,Never left
+21.3,85,443,Dog,Empty
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,No choice
+20.3,84,440.6666667,Dog,Dog
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+48.4,75,908.5,Dog,Chicken
+NA,NA,NA,Dog,Never left
+28.65,65,1477.5,Dog,Dog
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Chicken
+NA,NA,NA,Dog,Empty
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+23.05,56,1248.333333,Dog,Dog
+NA,NA,NA,Dog,Never left
+23.5,58,1202.5,Dog,Dog
+21.25,65,1127,Dog,Dog
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Empty
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Empty
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Human
+NA,NA,NA,Dog,Human
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+24.8,73.5,1140,Dog,Dog
+24.35,44,1222.5,Dog,Dog
+24,45,940.8,Dog,Dog
+NA,NA,NA,Dog,Human
+NA,NA,NA,Dog,Empty
+NA,NA,NA,Dog,Human
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,No choice
+NA,NA,NA,Dog,Never left
+22.75,73,2201.666667,Dog,Dog
+24.55,46,1992.5,Dog,Dog
+NA,NA,NA,Dog,Human
+NA,NA,NA,Dog,chicken
+NA,NA,NA,Dog,No choice
+NA,NA,NA,Dog,Human
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,No choice
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Human
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+21.65,23.5,1365.6,Dog,No choice
+24.4,76.5,1435,Dog,Dog
+24,91,1285,Dog,Dog
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Chicken
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Empty
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,No choice
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+18.7,66,3895,Dog,Human
+21.95,67.5,2475,Dog,Human
+22.25,54.5,1457.5,Dog,Dog
+23.65,69.5,2963.333333,Dog,Chicken
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+22.1,25.5,1508.333333,Dog,Dog
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Human
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+19.45,27.5,1377.5,Dog,Dog
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+24.85,44,1211.666667,Dog,Dog
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,No choice
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,No choice
+25.9,47,1130,Dog,dog
+NA,NA,NA,Dog,chicken
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,No choice
+24.45,54,1373,Dog,No choice
+24.55,55.5,1408.25,Dog,dog
+NA,NA,NA,Dog,Human
+NA,NA,NA,Dog,Human
+24.75,52.5,861,Dog,Dog
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+26.3,54,701,Dog,Chicken
+NA,NA,NA,Dog,Never left
+24.8,35,766.4,Dog,No choice
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Empty
+NA,NA,NA,Dog,Never left
+26.05,23,875,Dog,No choice
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Empty
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+28.85,25,1125,Dog,Empty
+29,27.5,1301.8,Dog,Empty
+NA,NA,NA,Dog,Empty
+48.2,24.9,1085,Dog,chicken
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Empty
+NA,NA,NA,Dog,chicken
+NA,NA,NA,Dog,Never left
+25.1,33,1137.5,Dog,Dog
+NA,NA,NA,Dog,No choice
+24.55,34.5,942,Dog,Empty
+NA,NA,NA,Dog,Never left
+24.25,45,804.5,Dog,Chicken
+24.4,38.5,541.4,Dog,No choice
+NA,NA,NA,Dog,No choice
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Empty
+NA,NA,NA,Dog,Never left
+24.05,49.5,1159,Dog,No choice
+NA,NA,NA,Dog,Never left
+23.8,68,674.5,Dog,Dog
+NA,NA,NA,Dog,Empty
+NA,NA,NA,Dog,Never left
+25.65,70.5,1468.333333,Dog,Dog
+24.8,60,1038,Dog,Dog
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Human
+NA,NA,NA,Dog,Human
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+24.35,58.5,1153,Dog,No choice
+NA,NA,NA,Dog,Never left
+23.6,50,973.3333333,Dog,Dog
+NA,NA,NA,Dog,Never left
+25.6,37,1252,Dog,No choice
+25.6,35.5,1138.6,Dog,No choice
+26.1,33.5,1342,Dog,No choice
+26.1,32.5,1091.4,Dog,No choice
+20.5,59,1150,Dog,Dog
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+28.55,23.5,1070.5,Dog,Dog
+NA,NA,NA,Dog,Chicken
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Never left
+NA,NA,NA,Dog,Human
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Empty
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+23.995,54.5,436.4385714,Chicken,Chicken
+NA,NA,NA,Chicken,Never left
+22,26.5,573.3333333,Chicken,Chicken
+NA,NA,NA,Chicken,Never left
+23.75,23,431,Chicken,Chicken
+NA,NA,NA,Chicken,Empty
+NA,NA,NA,Chicken,Dog
+NA,NA,NA,Chicken,Empty
+NA,NA,NA,Chicken,Dog
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Human
+NA,NA,NA,Chicken,Human
+21.55,55,444,Chicken,Chicken
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+20.4,63.5,534,Chicken,Chicken
+19.55,54.5,429.3333333,Chicken,Chicken
+NA,NA,NA,Chicken,Never left
+20.6,63,449,Chicken,Chicken
+17.4,32.5,476.7142857,Chicken,No choice
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,No choice
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Empty
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,No choice
+NA,NA,NA,Chicken,Dog
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+26.3,49.5,418.3333333,Chicken,Human
+NA,NA,NA,Chicken,Never left
+23.7,39,431.25,Chicken,Dog
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Empty
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,No choice
+NA,NA,NA,Chicken,Dog
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+39.75,44.8,626,Chicken,Chicken
+NA,NA,NA,Chicken,Never left
+28.6,49,378.2,Chicken,Dog
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+22.55,46.5,525,Chicken,Chicken
+NA,NA,NA,Chicken,Empty
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Dog
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Dog
+NA,NA,NA,Chicken,Dog
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Empty
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+20.15,49,561.255,Chicken,Empty
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Human
+NA,NA,NA,Chicken,Human
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Dog
+NA,NA,NA,Chicken,Dog
+NA,NA,NA,Chicken,Dog
+NA,NA,NA,Chicken,Human
+NA,NA,NA,Chicken,Empty
+NA,NA,NA,Chicken,Human
+NA,NA,NA,Chicken,Never left
+22.3,69,687.2,Chicken,No choice
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Dog
+NA,NA,NA,Chicken,Dog
+NA,NA,NA,Chicken,Human
+NA,NA,541,Chicken,chicken
+NA,NA,NA,Chicken,No choice
+21.2,59.5,757,Chicken,Human
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,No choice
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Human
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,No choice
+22.45,NA,796,Chicken,Dog
+23.6,69,511,Chicken,Dog
+NA,NA,NA,Chicken,Never left
+26.25,66,737,Chicken,Chicken
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Empty
+NA,NA,NA,Chicken,Never left
+22.3,36.5,518.6,Chicken,No choice
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Human
+NA,NA,NA,Chicken,Human
+NA,NA,NA,Chicken,Dog
+59,22.85,605,Chicken,Chicken
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Dog
+NA,NA,NA,Chicken,Never left
+20.95,37,2206.666667,Chicken,Human
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+18.65,31,2342.5,Chicken,Dog
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Dog
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+39.55,40.1,484.2,Chicken,No choice
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,No choice
+25.35,55,555.5,Chicken,dog
+25.45,44.5,497.5,Chicken,chicken
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+25.7,42.5,517.6,Chicken,No choice
+23.85,62,476.2,Chicken,No choice
+42.75,46.15,342,Chicken,dog
+23.1,68.5,562.6666667,Chicken,Human
+NA,NA,NA,Chicken,Human
+NA,NA,NA,Chicken,Dog
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+26.35,45.5,531,Chicken,Chicken
+NA,NA,NA,Chicken,Never left
+25.1,39.5,592.8,Chicken,No choice
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Empty
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,No choice
+NA,NA,NA,Chicken,Never left
+27.1,21,557.5,Chicken,Empty
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Empty
+NA,NA,NA,Chicken,Empty
+NA,NA,NA,Chicken,Empty
+73.2,49.15,502,Chicken,chicken
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Empty
+24.3,63,449.5,Chicken,chicken
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Dog
+23.05,29,567.6,Chicken,No choice
+NA,NA,NA,Chicken,Empty
+NA,NA,NA,Chicken,Never left
+23.6,37.5,422.5,Chicken,Chicken
+NA,NA,NA,Chicken,No choice
+25.1,30,603.8,Chicken,No choice
+NA,NA,NA,Chicken,Never left
+22.5,44.5,427,Chicken,Empty
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,No choice
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Dog
+NA,NA,NA,Chicken,Empty
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Dog
+NA,NA,NA,Chicken,Dog
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Human
+NA,NA,NA,Chicken,Human
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,No choice
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Dog
+NA,NA,NA,Chicken,Never left
+24.3,32.5,528.8,Chicken,No choice
+24,30.5,522.8,Chicken,No choice
+NA,NA,NA,Chicken,No choice
+25.4,28.5,539.8,Chicken,No choice
+NA,NA,NA,Chicken,Dog
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+28.1,28.5,489.5,Chicken,Dog
+24.35,37.5,446,Chicken,Chicken
+NA,NA,NA,Chicken,Never left
+NA,NA,NA,Chicken,Never left
+12.3,28.5,447,Chicken,Human
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Empty
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Chicken
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Chicken
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Chicken
+NA,NA,NA,Human,Empty
+NA,NA,NA,Human,Dog
+NA,NA,NA,Human,Empty
+NA,NA,NA,Human,Dog
+NA,NA,NA,Human,Never left
+20.65,27.5,421.2,Human,Human
+26.1,31.55,418.5,Human,Human
+22.1,59.5,444,Human,Chicken
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+22.25,56,493.5,Human,Chicken
+NA,NA,NA,Human,Chicken
+NA,NA,NA,Human,Never left
+22.65,76.5,467.5,Human,Chicken
+NA,NA,NA,Human,No choice
+NA,NA,NA,Human,Never left
+19.15,36,442.5714286,Human,No choice
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Empty
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+25.2,90,444.2857143,Human,No choice
+26.3,86.5,466.3333333,Human,Dog
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+28.15,68,420,Human,Human
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Dog
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Empty
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+23.4,51.5,440.1428571,Human,No choice
+NA,NA,NA,Human,Dog
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Chicken
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Dog
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Chicken
+NA,NA,NA,Human,Empty
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Dog
+NA,NA,NA,Human,Never left
+21.55,74.5,1587.5,Human,Dog
+22.4,51.5,1522,Human,Dog
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+22.85,59,1470,Human,Empty
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Empty
+NA,NA,NA,Human,Never left
+23.4,68,1662.5,Human,Human
+24.8,46.5,1701.25,Human,Human
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Dog
+23.7,58.5,1470,Human,Dog
+NA,NA,NA,Human,Dog
+24.55,73.5,1500,Human,Human
+23.2,58.5,1676.666667,Human,Empty
+24,45,1465,Human,Human
+NA,NA,NA,Human,Never left
+24.85,55,1696,Human,No choice
+NA,NA,NA,Human,Never left
+25.2,48,1791.666667,Human,Dog
+NA,NA,NA,Human,Dog
+22.55,62.5,2138.333333,Human,Human
+NA,NA,NA,Human,chicken
+NA,NA,NA,Human,No choice
+24.5,45,2280,Human,Human
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,No choice
+NA,NA,NA,Human,Never left
+25.45,70,2353.333333,Human,Human
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+21.5,36,2468,Human,No choice
+NA,NA,NA,Human,Dog
+NA,NA,NA,Human,Dog
+NA,NA,NA,Human,Never left
+26.15,56.5,1995,Human,Chicken
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Empty
+NA,NA,NA,Human,Never left
+23.55,42.5,3452,Human,No choice
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+23.1,58.5,1737.5,Human,Human
+23,57,2047.5,Human,Human
+NA,NA,NA,Human,Dog
+NA,NA,NA,Human,Chicken
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+22.95,29,3430,Human,Dog
+NA,NA,NA,Human,Never left
+21.95,32.5,2345,Human,Human
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Dog
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+24.85,52,1355,Human,Dog
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+25.05,47,2284,Human,No choice
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,No choice
+NA,NA,NA,Human,dog
+NA,NA,NA,Human,chicken
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+27.05,48,1705,Human,No choice
+NA,NA,NA,Human,No choice
+NA,NA,NA,Human,dog
+24.4,58,1414.5,Human,Human
+27.35,41,2690,Human,Human
+NA,NA,NA,Human,Dog
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Chicken
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,No choice
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Empty
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,No choice
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Empty
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Empty
+NA,NA,NA,Human,Empty
+29.6,22.5,2505,Human,Empty
+NA,NA,NA,Human,chicken
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Empty
+NA,NA,NA,Human,chicken
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Dog
+25,29,2004,Human,No choice
+NA,NA,NA,Human,Empty
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Chicken
+NA,NA,NA,Human,No choice
+NA,NA,NA,Human,No choice
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Empty
+NA,NA,NA,Human,Never left
+24.05,36,1819,Human,No choice
+NA,NA,NA,Human,Never left
+24.65,57,1565,Human,Dog
+24.8,53,1960,Human,Empty
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Dog
+NA,NA,NA,Human,Dog
+NA,NA,NA,Human,Never left
+26.6,51,1610,Human,Human
+24.8,51,1297.5,Human,Human
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+24.3,49,1614,Human,No choice
+NA,NA,NA,Human,Never left
+25.55,41,2055,Human,Dog
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,No choice
+NA,NA,NA,Human,No choice
+NA,NA,NA,Human,No choice
+NA,NA,NA,Human,No choice
+NA,NA,NA,Human,Dog
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Dog
+26.05,32,1735,Human,Chicken
+NA,NA,NA,Human,Never left
+NA,NA,NA,Human,Never left
+27.05,32,1840,Human,Human

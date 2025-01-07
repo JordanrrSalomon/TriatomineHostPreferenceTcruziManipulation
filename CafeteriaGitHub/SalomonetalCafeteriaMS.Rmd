@@ -1,0 +1,558 @@
+---
+title: "Cafeteria Manuscript Code"
+author: "Jordan Salomon"
+date: "`r Sys.Date()`"
+output: word_document
+---
+This code is assoiciated with the manuscript XXX by Salomon et al. 2025. This code includes all of the analyses that were included in the manuscript and therefore, does not include exploratory data analysis. 
+
+Each chunk is broken into each reserach question and the corresponding analyses and figures produced fo the manuscript.
+```{r packages that apply for the whole code}
+library(Matrix)
+library(lme4)
+library(MASS)
+library(ggplot2)
+library(readr)
+library(foreign)
+library(nnet)
+library(gtsummary)
+library(tidyverse)
+library(Rmisc)
+library(dplyr)
+library(EnvStats)
+library(pwr)
+library(DescTools)
+library(oddsratio)
+library(cowplot)
+library(ggbreak)
+library(gt)
+```
+Some data definitions regarding the data columns
+
+Outcome Numeric column represents:
+1= never left, the bug never participated in the trial by not leaving the starting point
+2= no choice, but they left
+3= empty, the bug chose the empty chamber
+4= chicken
+5= dog
+6= human
+
+KBParticipating is basically the initation of foraging time, so when the bug was dropped into the olfactometer minus the time they started to advance towards hosts or enter the clear parts of the olfactometer. 
+
+KBactivesec is the time that the KB was in either clear of the olfactometer, or the total time they spent in the olfactometer... the time they entered the clear parts and advanced towards hosts minus the time the trial ended (or they made a choice)
+```{r the data}
+#Cafe for R is the main datasheet for everything to be subsetted out. 
+CafeforRPublic <- read_csv("/Users/jordansalomon/Dropbox/JordanSalomon-HamerLab/Cafeteria/CafeteriaR/CafeforRPublic.csv", 
+    col_types = cols(TimeTrialStart = col_number(), 
+                     KBParticipatingsec = col_number(), 
+                     KBactivesec = col_number(), 
+                     Outcome = col_factor(levels = c("Never left", 
+        "No choice", "Empty", "Chicken", 
+        "Dog", "Human"))))
+View(CafeforRPublic)
+attach(CafeforRPublic)
+
+ExcludeNeverLeft<-subset(CafeforRPublic, `Participate`=="1")
+TGER<-subset(CafeforRPublic, Species=="T. gerstaeckeri")
+NEGATIVES<-subset(CafeforRPublic, TcruziStatus =="0")
+NEGATIVESparticipated<-subset(NEGATIVES, Participate=="1")
+ExcludingNeverLeftTGER<-subset(ExcludeNeverLeft, Species=="T. gerstaeckeri")
+TGERparticipatedHosts<-ExcludingNeverLeftTGER[ExcludingNeverLeftTGER$COMBO != "E vs E",]
+
+#HostCues is the dataset regarding questions surrounding if host abiotic cues are associated with any outcomes of the triatomines
+HostCues <- read_csv("/Users/jordansalomon/Dropbox/JordanSalomon-HamerLab/Cafeteria/CafeteriaR/HostCues.csv")
+
+#This dataset can be used to generate figure 4 of the manuscript...comparing the time it took triatomines to leave the starting point compared between t. cruzi exposed and unexposed.
+TGERparticipatingExcludingEvEPUBLIC <- read_csv("/Users/jordansalomon/Dropbox/JordanSalomon-HamerLab/Cafeteria/CafeteriaR/TGERparticipatedExcluingEvEPUBLIC.csv")
+
+##Figure details 
+#naming and labeling for figure splcing
+supp.labs <- c("un-exposed", "T. cruzi exposed")
+names(supp.labs) <- c("0", "1")
+
+
+#color blind safe pallet 
+cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+
+```
+In general short hand coding can reflect the following questions: 
+what was associated with the triaotmines participating in the trial? = PARTICIPATION
+what is the host preference difference between exposed and unexposed triatomines? = PARASITE MANIPUATLION (CHOICE & TIME SPENT)
+what is the host preference difference between T. gersteackeri and R. prolixus? = GENERA DIFFERENCES (CHOICE & TIME SPENT)
+what host abiotic cues are associated with triatomine choices? = HOST CUES
+
+```{r PARTICIPATION}
+###PARTICIPATION...is there an association between triatomines (including both species) leaving the starting point and T.cruzi exposure status, days the triatomine was starved prior to trial, triatomine species, the time of of day that the trial occured at, or the abiotic conditions (temperature and humidity) of the room in which trials took place? 
+
+participateOddModALL<-glm(Participate~ TcruziStatus + DaysKBstarved + Species+ TimeTrialStart + AverageRoomHumidity + AverageRoomTemp-1, data=CafeforRPublic, family = binomial) #including the -1 removes a y axis, which is more appropriate for a model with a binary or categorical response variable.
+summary(participateOddModALL) # 1 = yes, the triatomine participated by leaving the starting point. 0 = no the triatomine did not participate in the trial and never left the starting point. Therefore interpreting the model would be finding the association with leaving the starting point or 1 rather than never leaving the starting point or 0. 
+#Model interpretation: days starved is a significant association with triatomines participating in a trial within a full model. The association is positive, where an increase in days triatomines were starved is associated with them leaving the starting point and advancing towards hosts. Additionally the two species had a significant association with triatomines participating or not in a trial. Although the association with both species leaving the starting point was negative, the beta coefficient for T. gersteackeri leaving the starting point was greater than R. prolixus. None of the other factors tested had a significant association with participation (triatomines leaving the starting point or not). 
+
+#To better understand the odds ratios are the exponent of the coefficient...
+exp(participateOddModALL$coefficients) #interpreting the odds ratios: 1 is the 0, so coefficients over one is positive and under one is negative
+exp(confint(participateOddModALL)) # to get 95% confidence intervals around the ratios
+(exp(participateOddModALL$coefficients)-1)*100 # to get it to a percentage rather than a ratio
+#odds ration interpretation: so for every additional day a triatomine was starved they were ~1% more likely to participate. Both the species were not likely to participate, but T. gersteackeri were more not likely with an odds of not participating ~87% compared to R. prolixus that were 78% not likely to participate. 
+
+#quick summary table
+CafeforRPublic %>% 
+  tbl_summary(include = c(Participate, DaysKBstarved, Species),
+              by= Participate,
+              missing = "no")  %>%
+              add_overall()%>%
+              modify_header(label ~ "") %>%
+              add_n() %>% 
+              add_p() %>%
+              add_ci %>%
+              bold_labels()%>%
+              as_gt()%>%
+              gt::tab_options(table.font.names = "Times New Roman", 
+                          table.font.color = "black")
+
+```
+Overall participation or if the triatomines left the starting point and advanced towards hosts was around 50% across all trials. Understanding why there was inefficient level of participation in the presence of known associated bloodmeal hosts of triatomines, we wanted to test if we could identify any intrinsic or extrinsic factors associated with participation in a trial. We found that triatomines leaving the starting is associated with the duration of days inwhich they were starved. Where if they were starved longer than they were more liekly to leave. Furthermore, we see that the triatomines species is associated with participation. Both species were equally not likly to participate, however T. gersteackeri were less liekly to participate than R. prolixus. 
+
+```{r PARASITE MANUPULATION CHOICE}
+###PARASITE MANIPULATION HOST PREFERENCE (CHOICE)...is there an association between T. cruzi exposure and the choices or outcomes of T. gersteackeri in trials? 
+#To assess choice of T. gersteackeri we only considrered trials were individuals left the starting point (or did participate). Therefore trials where T. gersteackeri left the starting point but did not commit to a choice (defined as falling into the pitfall traps on either end of the olfactometer) are still included for these analyses.  
+
+Choicemod<-glm(TcruziStatus~Outcome-1, data=ExcludingNeverLeftTGER, family = binomial(link="logit")) #including the -1 removes a y axis, which is more appropriate for a model with a binary or categorical response variable.
+# 1 = yes, the T. gersteackeri was exposed to T. cruzi. 0 = no, the T. gersteackeri was not exposed to T. cruzi. Therefore interpreting the model would be finding the association with T. gersteackeri was exposed to T. cruzi or 1, rather than the T. cruzi unexposed T. gersteackeri or 0. 
+summary(Choicemod) #Model interpretation: Among all of the trial outcomes, only dogs had a significant association with T. gersteackeri T. cruzi exposure status. A significant negative association is between T. cruzi exposed T. gersteackeri and T. gersteackeri choosing dogs.
+
+#To better understand the odds ratio or liklihood of a CHOICE between T. cruzi exposed and unexposed T. gersteackeri...
+exp(Choicemod$coefficients) #1 is the 0, so coefficients over one is positive and under one is negative
+exp(confint(Choicemod)) #to get 95% confidence intervals around the ratios
+(exp(Choicemod$coefficients)-1)*100 #to transform it to a percentage
+#odds ratio choice interpretation... 
+#the odds of 'No choice' being an outcome of the exposed T. gersteackeri no different than unexposed T. gersteackeri (percentage and ratio wise).
+#the odds of T. gersteackeri choosing the 'empty' chamber, is no different than unexposed T. gersteackeri.
+#the odds of T. gersteackeri choosing the 'empty' chamber, is 4.44 e-14% less for exposed T. gersteackeri compared to unexposed. Basically no different. 
+#the odds of exposed T. gersteackeri choosing the 'chicken', less by a factor of 0.78 compared to unexposed T. gersteackeri.
+#the odds of an exposed T. gersteackeri choosing the 'chicken', is 22% less for exposed T. gersteackeri compared to unexposed.
+#the odds of exposed T. gersteackeri choosing the 'dog', less by a factor of 0.41 compared to unexposed T. gersteackeri.
+#the odds of an exposed T. gersteackeri choosing the 'dog', is 58.82% less compared to unexposed.
+#the odds of an exposed T. gersteackeri choosing the 'human', less by a factor of 0.67 compared to unexposed.
+#the odds of an exposed T. gersteackeri choosing the 'human', is 33.3% less compared to unexposed.
+
+
+#quick summary table
+ExcludingNeverLeftTGER %>% 
+  filter(Outcome == "Dog" | Outcome == "Chicken" | Outcome == "Human"| Outcome == "Empty" | Outcome == "No choice")  %>%
+  mutate(Outcome = factor(Outcome))  %>%
+  droplevels()  %>%
+  tbl_summary(include = c(TcruziStatus, Outcome),
+              by=TcruziStatus,
+              missing = "no")  %>%
+              add_ci() %>%
+              add_p %>%
+              add_n() %>%
+              bold_labels() %>%
+              modify_header(list(label ~ "",
+                                 stat_1 ~ "unexposed, **N = {n}**",
+                                 stat_2 ~ "*T. cruzi* exposed, **N = {n}**"))%>%
+              
+              as_gt()%>%
+              gt::tab_options(table.font.names = "Times New Roman", 
+                          table.font.color = "black")
+
+###################################################################################################
+# FIGURE GENERATION THAT REVOLVE AROUND PARASITE MANIPULATION REGARDING CHOICE OF T. GERSTEACKERI
+
+##CANT USE THE 'WITH STAT_N_TEXT' FIGURE FOR THE ACUATL FIGURE BECAUSE IT PLOTS THE NUMERIC VALUES, BUT THATS THE ONLY WAY TO GET STAT_N_TEXT... SO NEED TO MANUALLY ADD IN POWERPOINT BUT MAKE BOTH SO I CAN EASILY VERIFY THE N
+
+#T. gersteackeri trial outcomes between T. cruzi exposed and unexposed Figure 2
+# WITH STAT_N_TEXT
+ggplot(TGER, aes(fill=Outcome, y=OutcomeNumeric, x=COMBO)) +  
+  geom_bar(stat = "identity", position = "fill") +
+  coord_flip() +
+  facet_grid(~TcruziStatus, labeller = as_labeller(supp.labs)) + 
+  scale_y_continuous(breaks = seq(0,1,0.25))+
+  scale_x_discrete(labels = c('E vs E'= 'E vs E', 'E vs C' = 'E vs C', 'E vs D'='E vs D', 'E vs H' ='E vs H',  'D vs H'='D vs H', 'H vs C'= 'H vs C' ), limit = c('E vs E', 'E vs C', 'E vs D', 'E vs H', 'D vs C', 'D vs H', 'H vs C')) +
+  scale_fill_manual(breaks=c('Chicken', 'Dog', 'Human', 'No choice', 'Empty', 'Never left'), values = c("#E69F00", "#56B4E9", "#009E73", "#CC79A7", "yellow" , "black"))+
+  stat_n_text(aes(x=COMBO, y = OutcomeNumeric), y.pos=1.05, size = 6)+
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(), 
+        axis.line = element_line(colour = "black"), 
+        axis.text.y = element_text(color="black"), 
+        axis.text.x = element_text(color="black"), 
+        text = element_text(size=20, family = "Helvetica"), 
+        legend.position="bottom", 
+        legend.direction = "horizontal") +
+        xlab("") +
+        ylab("") +
+        guides(fill=guide_legend(title="Triatomine outcomes", nrow = 1)) 
+# WITHOUT STAT_N_TEXT
+ggplot(data = TGER, aes(x = COMBO, fill = Outcome)) +
+      geom_bar(position = 'fill') +
+  coord_flip() +
+  facet_grid(~TcruziStatus, labeller = as_labeller(supp.labs)) + 
+  scale_y_continuous(breaks = seq(0,1,0.25), limits = c(0,1.25))+
+  scale_x_discrete(labels = c('E vs E'= 'E vs E', 'E vs C' = 'E vs C', 'E vs D'='E vs D', 'E vs H' ='E vs H',  'D vs H'='D vs H', 'H vs C'= 'H vs C' ), limit = c('E vs E', 'E vs C', 'E vs D', 'E vs H', 'D vs C', 'D vs H', 'H vs C')) +
+  scale_fill_manual(breaks=c('Chicken', 'Dog', 'Human', 'No choice', 'Empty', 'Never left'), values = c("#E69F00", "#56B4E9", "#009E73", "#CC79A7", "yellow" , "black"))+
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(), 
+        axis.line = element_line(colour = "black"), 
+        axis.text.y = element_text(color="black"), 
+        axis.text.x = element_text(color="black"), 
+        text = element_text(size=20, family = "Helvetica"), 
+        legend.position="bottom", 
+        legend.direction = "horizontal") +
+        xlab("") +
+        ylab("") +
+        guides(fill=guide_legend(title="Triatomine outcomes", nrow = 1)) 
+
+
+# CHOICE MADE BY EXPOSURE STATUS ONLY INCLUDING ONES THAT LEFT so exlucing the ones that never left Figure 6
+##PERCENT OF CHOICES BASED ON EXPOSURE STATUS exlucing the ones that never left
+CHOICEpercents <- data.frame(Outcomes = c('Dog', 'Chicken', 'Human', 'Empty', 'No choice'), 
+                              Percents = c(34, 18, 18, 18, 12, 20, 20, 17, 26, 17), 
+                              PerCIlow = c(22, 9, 9, 9, 5, 9.1, 9.1, 7.2, 13, 7.2), 
+                              PerCIhigh = c(49, 32, 32, 32, 25, 37, 37, 34, 34, 34), 
+                              exposureStatus = c("unexposed", "unexposed", "unexposed", "unexposed", "unexposed", "exposed", "exposed", "exposed", "exposed", "exposed"))
+CHOICEpercentgg<-ggplot(CHOICEpercents, aes(x = Outcomes, y = Percents, colour = exposureStatus)) + 
+    geom_point(aes(shape = exposureStatus, color = exposureStatus), size = 3, position = position_dodge(width = 0.5)) + 
+    coord_flip() +
+    scale_x_discrete(labels = c('Chicken' = 'Chicken', 'Dog' = 'Dog', 'Human' = 'Human', 'No choice' = 'No choice', 'Empty' = 'Empty'), limit = c('Dog', 'Chicken', 'Human', 'Empty', 'No choice')) +
+    scale_y_continuous(breaks = seq(0, 100, 25), labels = seq(0, 100, 25),
+                       limits = c(0,100)) +
+    scale_color_manual(name = "", labels = c('Unexposed', 'Exposed'), breaks=c('unexposed', 'exposed'), values = c("black", "salmon"))+
+    scale_shape_manual(name = "", labels = c('Unexposed', 'Exposed'), values = c(1, 19)) +
+    geom_errorbar(aes(ymin=PerCIlow,ymax=PerCIhigh,color=exposureStatus, width = 0.2), position = position_dodge(width = 0.5)) +
+    theme(panel.grid.major = element_blank(), 
+          panel.grid.major.y = element_line(color = "lightgrey", size = 0.25, linetype = 2),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(), 
+        axis.line = element_line(colour = "black"), 
+        axis.text.y = element_text(color="black"), 
+        axis.text.x = element_text(color="black"), 
+        text = element_text(size=20, family = "Helvetica"), 
+        legend.position="bottom", 
+        legend.direction = "horizontal") +
+        xlab("") +
+        ylab("% of trial outcomes") +
+        guides(fill=guide_legend(title="", nrow = 2))
+CHOICEpercentgg
+CHOICEodds <- data.frame(Outcomes = c('Dog', 'Chicken', 'Human', 'Empty', 'No choice'), 
+                              boxOdds = c(0.4117647, 0.7777778, 0.6666667, 1, 1), 
+                              boxCILow = c(0.1592097, 0.2779870, 0.2234795, 0.3904253, 0.3128303), 
+                              boxCIHigh = c(0.9542606, 2.0874805, 1.8487217, 2.5613094, 3.1966217))
+CHOICEoddsgg<-ggplot(CHOICEodds, aes(x = boxOdds, y = Outcomes)) + 
+    geom_vline(aes(xintercept = 1), linewidth = .25, linetype = "dashed") + 
+    geom_errorbarh(aes(xmax = boxCIHigh, xmin = boxCILow), size = .5, height = 
+                    .2, color = "black") +
+    geom_point(size = 3.5, color = "salmon") +
+    scale_x_continuous(breaks = seq(0, 4, 1), labels = seq(0, 4, 1),
+                       limits = c(0, 3.5)) +
+    scale_y_discrete(labels = c('Dog' = 'Dog', 'Chicken' = 'Chicken', 'Human' = 'Human', 'Empty' = 'Empty', 'No choice' = 'No choice'), limit = c('Dog', 'Chicken', 'Human', 'Empty', 'No choice')) +
+    theme(panel.grid.major = element_blank(),
+          panel.grid.major.y = element_line(color = "lightgrey", size = 0.25, linetype = 2),
+          panel.grid.minor = element_blank(),
+          panel.background = element_blank(), 
+          axis.line = element_line(colour = "black"), 
+          axis.text.y = element_text(color="black"), 
+          axis.text.x = element_text(color="black"), 
+          text = element_text(size=20, family = "Helvetica"), 
+          legend.position="bottom", 
+          legend.direction = "horizontal") +
+          xlab("Odds ratio of T. cruzi exposed T. gersteackeri") +
+          ylab("") +
+          guides(fill=guide_legend(title="Triatomine outcomes", nrow = 1))
+CHOICEoddsgg
+#### PERCENTAGE OF choices COMPARING EXPOSED AND UNEXPOSED TRIATOMINES WITH THE ODDS RATIO exluding bugs that never left
+CHOICEfigs<-plot_grid(CHOICEpercentgg, CHOICEoddsgg, align = "hv", nrow = 1, labels = c("A","B"), label_size = 14)
+CHOICEfigs #figure 6
+
+
+
+```
+Our study's questions were to understand if there was a preferd host of T. gersteackeri among known associated hosts, and if T. cruzi exposure status was associated with any host preference outcomes. We found that unexposed T. gersteackeri had a prefernce for dogs, but t. cruzi exposed T. gersteackeri had no significant preference among the known associated bloodmeal hosts. Furthermore, the odds of a T. cruzi exposed T. gersteackeri choosing chicken is 22%, choosing human is 33.3%, and choosing dog is 58.82%, less compared to unexposed T. gersteackeri. The illustrated foraging behavioral differences among T. cruzi exposed and unesposed, starving T. gersteackeri inthe presence of known associated bloodmeal hosts, is evidence for parasite manipulation in this system.   
+
+```{r PARASITE MANUPULATION TIME SPENT}
+###PARASITE MANIPULATION HOST PREFERENCE (TIME SPENT)...is there an association between T. cruzi exposure and the time T. gersteackeri spent in the olfactometer advancing towards hosts?
+Timemod<-glm(TcruziStatus~ KBParticipatingsec-1, data=ExcludingNeverLeftTGER, family = binomial) #including the -1 removes a y axis, which is more appropriate for a model with a binary or categorical response variable.
+# 1 = yes, the T. gersteackeri was exposed to T. cruzi. 0 = no, the T. gersteackeri was not exposed to T. cruzi. Therefore interpreting the model would be finding the association with T. gersteackeri was exposed to T. cruzi or 1, rather than the T. cruzi unexposed T. gersteackeri or 0. 
+
+summary(Timemod) # model interpretation: There is a significant negative association. Meaning T. cruzi exposed T. gersteackeri leave the starting point to advance towards hosts in less time (or faster) than unexposed T. gersteackeri. 
+
+exp(Timemod$coefficients) #1 is the 0, so coefficients over one is positive and under one is negative
+exp(confint(Timemod)) #to get 95% confidence intervals around the ratios
+(exp(Timemod$coefficients)-1)*100 # to get it to a percentage
+#odds ratio interpretation: for every additional second that it took for T. gersteackeri to leave the starting point and advance towards hosts, the odds of the triaotmine being T.cruzi- exposed were 0.06% less than an unexposed T. gersteackeri. 
+
+
+###################################################################################################
+# FIGURE GENERATION THAT REVOLVE AROUND PARASITE MANIPULATION REGARDING TIME SPENT OF T. GERSTEACKERI
+
+####FORAGING INITIATION (time they were dropped minus the time they started advancing towards hosts)
+ggplot(TGERparticipatingExcludingEvEPUBLIC) +
+            geom_col(aes(x = COMBO, y = as.numeric(KBParticipatingsec), fill = TimeSpentMost)) + 
+            coord_flip() +
+            facet_grid(~TcruziStatus, labeller = as_labeller(supp.labs)) + 
+            scale_x_discrete(labels = c('E vs C' = 'E vs C', 'E vs D'='E vs D', 'E vs H' ='E vs H', 'D vs H'='D vs H', 'H vs C'= 'H vs C' ), limit = c('E vs C', 'E vs D', 'E vs H', 'D vs C', 'D vs H', 'H vs C')) +
+            scale_fill_manual(breaks=c('Chicken', 'Dog', 'Human', 'Empty'), values = c("#E69F00", "#56B4E9", "#009E73", "yellow")) +
+  scale_y_continuous(name = "",
+                    limits = c(0,10000),
+                    breaks = seq(0,9000,2250))+  
+  stat_n_text(aes (x = COMBO, y = as.numeric(KBParticipatingsec)), y.pos=9700, size = 6)+
+    theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(), 
+        axis.line = element_line(colour = "black"), 
+        axis.text.y = element_text(color="black"), 
+        axis.text.x = element_text(color = "black"), 
+        text = element_text(size=20, family = "Helvetica"), legend.position="bottom") + 
+        xlab("") +
+        ylab("Total seconds until triatomines advanced towrds hosts") +
+        guides(fill=guide_legend(title="Spent the most seconds near")) 
+```
+In addition to testing choice, we also quantified time spent near each host. This is critical with behavioral assays assessing preference, especially when we prevented bloodfeeding. We did not find that T. cruzi exposed or unexposed T. gersteackeri spent more time near anyone host in particular, or that they spent different amounts of time in the olfactometer in general. But we did find that T. cruzi exposed T. gersteackeri were associated with taking less time to leave the starting point to advance towards hosts. Furthermore, for every additional second that it took for T. gersteackeri to leave the starting point and advance towards hosts, the odds of the triaotmine being T.cruzi exposed were 0.06% less than an unexposed T. gersteackeri. This analysis also demonstrated foraging behavioral differences among T. cruzi exposed and unesposed, starving T. gersteackeri inthe presence of known associated bloodmeal hosts; and is evidence for parasite manipulation in this system. This dynamic is particularily important to consider in regards to transmission since a major route of transmission for T. cruzi is a mammal ingesting an infected triatomine. Therefore, if T. cruzi exposed triatomines are more sensitive to host cues and increase activity and attraction to hosts that could predate on the infected triatomine, this has the potential to increase transmission. 
+```{r GENERA DIFFERENCES CHOICE}
+###GENERA DIFFERENCES IN HOST PREFERENCE (CHOICE)...is there an association with choice and triatomine species? This data is subset to only include unexposed T. gersteackeri, since we never exposed R. prolixus to T. cruzi.
+generaOutcomemod<-glm(as.factor(Species)~Outcome-1, data=NEGATIVES, family = binomial(link="logit")) #with the binomial respnse variable, 1 is T. gersteackeri and 0 is R. prolixus due to alphabetacle order settings within R. So the models beta coeficient outputs would represent T. gersteackeri compared to R. prolixus for that outcome.
+summary(generaOutcomemod) #Model interpretation: T. gersteackeri was significantly associated with not leaving the starting point, choosing the empty chamber, and choosing dog. 
+
+#odds ratio or liklihood of an OUTCOME from a trial between either T. gersteackeri or R. prolixus
+exp(generaOutcomemod$coefficients) #1 is the 0, so coefficients over one is positive and under one is negative
+exp(confint(generaOutcomemod)) #95% confidence intervals around the ratio
+(exp(generaOutcomemod$coefficients)-1)*100 # to transform the ratio to a percentage
+#odds ratio choice interpretation:
+#the odds of TGER 'never leaving' the starting point, was greater than RPRO by a factor of 4. 
+#the odds of TGER 'never leaving' the starting point, was 300% greater than RPRO.
+#the odds of TGER making 'no choice', was less than RPRO by a factor of 0.5. 
+#the odds of TGER making 'no choice', was 50% less than RPRO.
+#the odds of TGER choosing the 'empty'chamber, was greater than RPRO by a factor of 9. 
+#the odds of TGER choosing the 'empty'chamber, was 800% greater than RPRO.
+#the odds of TGER choosing the 'chicken', was greater than RPRO by a factor of 4.5 
+#the odds of TGER choosing the 'chicken', was 350% greater than RPRO.
+#the odds of TGER choosing the 'dog', was greater than RPRO by a factor of 2.8 
+#the odds of TGER choosing the 'dog', was 183.3% greater than RPRO.
+#the odds of TGER choosing the 'human', was greater than RPRO by a factor of 4.5 
+#the odds of TGER choosing the 'human', was 200% greater than RPRO.
+
+#quick summarizing table 
+NEGATIVES %>% 
+  tbl_summary(include = c(Outcome, Species),
+              by=Species,
+              missing = "no")  %>%
+               modify_header(list(label ~ "", 
+                                all_stat_cols() ~ "*{level}*, N = {n}")) %>%
+              add_ci()  %>%
+              add_p()  %>%
+              add_n() %>%
+              add_overall( )%>%
+              bold_labels() %>%
+              bold_p() %>%
+              as_gt()%>%
+              gt::tab_options(table.font.names = "Times New Roman", 
+                          table.font.color = "black")
+
+###################################################################################################
+# FIGURE GENERATION THAT REVOLVE AROUND COMPARING DIFFERENCES IN BEHAVIORS BEWTEEN T. GERSTEACKERI AND R. PROLIXUS, ONLY INCLUDED UNEXPOSED TRIATOMINES
+
+##CANT USE THE 'WITH STAT_N_TEXT' FIGURE FOR THE ACUATL FIGURE BECAUSE IT PLOTS THE NUMERIC VALUES, BUT THATS THE ONLY WAY TO GET STAT_N_TEXT... SO NEED TO MANUALLY ADD IN POWERPOINT BUT MAKE BOTH SO I CAN EASILY VERIFY THE N
+
+# Percentages of trial outcomes compared between T. GERSTEACKERI AND R. PROLIXUS, including the never left trials. Figure 4
+# WITH STAT_N_TEXT
+ggplot(NEGATIVES, aes(fill=Outcome, y=OutcomeNumeric, x=COMBO)) +  
+  geom_bar(stat = "identity", position = "fill") +
+  coord_flip() +
+  facet_grid(~Species) + 
+  scale_y_continuous(breaks = seq(0,1,0.25))+
+  scale_x_discrete(labels = c('E vs E'= 'E vs E', 'E vs C' = 'E vs C', 'E vs D'='E vs D', 'E vs H' ='E vs H',  'D vs H'='D vs H', 'H vs C'= 'H vs C' ), limit = c('E vs E', 'E vs C', 'E vs D', 'E vs H', 'D vs C', 'D vs H', 'H vs C')) +
+  scale_fill_manual(breaks=c('Chicken', 'Dog', 'Human', 'No choice', 'Empty', 'Never left'), values = c("#E69F00", "#56B4E9", "#009E73", "#CC79A7", "yellow" , "black"))+
+  stat_n_text(aes(x=COMBO), y.pos=1.05, size = 6)+
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(), 
+        axis.line = element_line(colour = "black"), 
+        axis.text.y = element_text(color="black"), 
+        axis.text.x = element_text(color="black"), 
+        text = element_text(size=20, family = "Helvetica"), 
+        legend.position="bottom", 
+        legend.direction = "horizontal") +
+        xlab("") +
+        ylab("") +
+        guides(fill=guide_legend(title="Triatomine outcomes", nrow = 1)) 
+
+# WITHOUT STAT_N_TEXT
+ggplot(data = NEGATIVES, aes(x = COMBO, fill = Outcome)) +
+      geom_bar(position = 'fill') +
+      facet_grid(~Species) + 
+      coord_flip() +
+      scale_y_continuous(breaks = seq(0,1,0.25), limits = c(0,1.25))+
+      scale_x_discrete(labels = c('E vs E'= 'E vs E', 'E vs C' = 'E vs C', 'E vs D'='E vs D', 'E vs H' ='E vs H',  'D vs H'='D vs H', 'H vs C'= 'H vs C' ), limit = c('E vs E', 'E vs C', 'E vs D', 'E vs H', 'D vs C', 'D vs H', 'H vs C')) + 
+  scale_fill_manual(breaks=c('Chicken', 'Dog', 'Human', 'No choice', 'Empty', 'Never left'), values = c("#E69F00", "#56B4E9", "#009E73", "#CC79A7", "yellow" , "black"))+
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(), 
+        axis.line = element_line(colour = "black"), 
+        axis.text.y = element_text(color="black"), 
+        axis.text.x = element_text(color="black"), 
+        text = element_text(size=20, family = "Helvetica"), 
+        legend.position="bottom", 
+        legend.direction = "horizontal") +
+        xlab("") +
+        ylab("") +
+        guides(fill=guide_legend(title="Triatomine outcomes", nrow = 1)) 
+
+##OUTCOME MADE BY GENERA (T. GERSTEACKERI AND R. PROLIXUS) across all trials, including never left. Figure 6
+##PERCENT OF OUTCOMES BY GENERA including the ones that never left. Figure 6A
+GENERApercents <- data.frame(Outcomes = c('Dog', 'Chicken', 'Human', 'Empty', 'No choice', 'Never left'), 
+                              Percents = c(16,  5.3,  7.9, 2.6,  32, 37, 16,  8.5, 8.5, 8.5, 5.7, 53), 
+                              PerCIlow = c(6.6, 0.92, 2.1, 0.14, 18, 22, 9.9, 4.2, 4.2, 4.2, 2.3, 43), 
+                              PerCIhigh = c(32, 19,   22,  15,   49, 54, 25,  16,  16,  16,  12,  63), 
+                              genera = c("R. prolixus", "R. prolixus", "R. prolixus", "R. prolixus", "R. prolixus", "R. prolixus", "T. gersteackeri", "T. gersteackeri", "T. gersteackeri", "T. gersteackeri", "T. gersteackeri", "T. gersteackeri"))
+GENERApercentgg<-ggplot(GENERApercents, aes(x = Outcomes, y = Percents, colour = genera)) + 
+                geom_point(aes(shape = genera, color = genera), size = 3, position = position_dodge(width = 0.5)) + 
+                coord_flip() +
+                scale_x_discrete(labels = c('Chicken' = 'Chicken', 'Dog' = 'Dog', 'Human' = 'Human', 'No choice' = 'No choice', 'Empty' = 'Empty', 'Never left'), limit = c('Dog', 'Chicken', 'Human', 'Empty', 'No choice', 'Never left')) +
+    scale_y_continuous(breaks = seq(0, 100, 25), labels = seq(0, 100, 25),
+                       limits = c(0,100)) +
+    scale_color_manual(name = "", labels = c(expression(italic("R. prolixus")), expression(italic("T. gersteackeri"))), breaks=c("R. prolixus", "T. gersteackeri"), values = c("black", "maroon"))+
+    scale_shape_manual(name = "", labels = c(expression(italic("R. prolixus")), expression(italic("T. gersteackeri"))), values = c(1, 19)) +
+    geom_errorbar(aes(ymin=PerCIlow,ymax=PerCIhigh,color=genera, width = 0.2), position = position_dodge(width = 0.5)) +
+    theme(panel.grid.major = element_blank(), 
+          panel.grid.major.y = element_line(color = "lightgrey", size = 0.25, linetype = 2),
+          panel.grid.minor = element_blank(),
+          panel.background = element_blank(), 
+          axis.line = element_line(colour = "black"), 
+          axis.text.y = element_text(color="black"), 
+          axis.text.x = element_text(color="black"), 
+          text = element_text(size=20, family = "Helvetica"), 
+          legend.position="bottom", 
+          legend.direction = "horizontal") +
+          xlab("") +
+          ylab("% of trial outcomes") +
+          guides(fill=guide_legend(title="", nrow = 2))
+GENERApercentgg
+#Odds ratios of trial outcomes for T. GERSTEACKERI compares to R. PROLIXUS. Figure 6B
+GENERAodds <- data.frame(Outcomes = c('Dog', 'Chicken', 'Human', 'Empty', 'No choice', 'Never left'), 
+                              boxOdds = c(2.833333, 4.5, 3, 9, 0.5, 4), 
+                              boxCILow = c(1.1771327, 1.1597796, 0.8951039, 1.6914697, 0.1740669, 2.2945473), 
+                              boxCIHigh = c(7.853515, 29.517795, 13.521756, 165.978270, 1.287481, 7.472780))
+GENERAoddsgg<-ggplot(GENERAodds, aes(x = boxOdds, y = Outcomes)) + 
+    geom_vline(aes(xintercept = 1), linewidth = .25, linetype = "dashed") + 
+    geom_errorbarh(aes(xmax = boxCIHigh, xmin = boxCILow), size = .5, height = 
+                    .2, color = "black") +
+    geom_point(size = 3.5, color = "maroon") +
+    scale_x_continuous(limits = c(0,170)) +
+    scale_x_break(c(5,7,10,12,15,30), scales = "free") +
+    scale_y_discrete(labels = c('Dog' = 'Dog', 'Chicken' = 'Chicken', 'Human' = 'Human', 'Empty' = 'Empty', 'No choice' = 'No choice', 'Never left' = 'Never left'), limit = c('Dog', 'Chicken', 'Human', 'Empty', 'No choice', 'Never left')) +
+    theme(panel.grid.major = element_blank(),
+          panel.grid.major.y = element_line(color = "lightgrey", size = 0.25, linetype = 2),
+          axis.text.x.top = element_blank(),
+          axis.ticks.x.top = element_blank(),
+          axis.line.x.top = element_blank(),
+          panel.grid.minor = element_blank(),
+          panel.background = element_blank(), 
+          axis.line = element_line(colour = "black"), 
+          axis.text.y = element_text(color="black"), 
+          axis.text.x = element_text(color="black"), 
+          text = element_text(size=20, family = "Helvetica"), 
+          legend.position="bottom", 
+          legend.direction = "horizontal") +
+    xlab("Odds ratio of T. gersteackeri") +
+    ylab("") +
+    guides(fill=guide_legend(title="Triatomine outcomes", nrow = 1))
+GENERAoddsgg
+#### PERCENTAGE OF OUTCOMES COMPARING GENERA WITH THE ODDS RATIO all outcomes
+GENERAfigs<-plot_grid(GENERApercentgg, GENERAoddsgg, align = "h", nrow = 1, labels = c("A","B"), label_size = 14)
+GENERAfigs #figure 6 as a whole
+
+```
+With an overall low participation of starved tratomines in trials and with a more recently colonized species of triatomine, we compared foraging behaviors between triatomine species. Our T. gersteackeri are more recently colonized compared to the CDC's R. prolixus. We found that T. gersteackeri were associated with not leaving the starting point, choosing dogs, and choosing the empty chamber compared to the R. prolixus. Furthermore, the odds of T. gersteackeri never leaving the starting point was 300%, choosing the empty host chamber was 800%, and choosing the dog was 183.3% greater than R. prolixus. And although the associations were not significant, the odds of T. gersteackeri making no choice was 50% less than R. prolixus. However, the odds of T. gersteackeri choosing chickens was 350% and chooeing humans was 200% greater than R. prolixus.
+```{r GENERA DIFERENCES TIME SPENT}
+### GENERA DIFFERENCES IN HOST PREFRENCE (TIME SPENT) among bugs that participcated is there an association between time spent near hosts and species? This data is subset to only include unexposed T. gersteackeri, since we never exposed R. prolixus to T. cruzi. 
+generaTimemod<-glm(as.factor(Species)~KBParticipatingsec-1, data=NEGATIVESparticipated, family = binomial) #with the binomial respnse variable, 1 is T. gersteackeri and 0 is R. prolixus due to alphabetacle order settings within R. So the models beta coeficient outputs would represent T. gersteackeri compared to R. prolixus for that outcome. 
+summary(generaTimemod) #Model interpretation: we found a significant positive association between T. gersteackeri and the time it took for individuals to begin advancing towards hosts, compared to R. prolixus.
+
+#Calculating the odds ratio's from the models beta coefficients
+exp(generaTimemod$coefficients) #1 is the 0, so coefficients over one is positive and under one is negative
+exp(confint(generaTimemod)) # calculating the 95% confidence intervals around the ratio
+(exp(generaTimemod$coefficients)-1)*100 # to transform the ratio to a percentage
+#Odds ratio interpretation: For every additional second that it took for triatomines to leave the starting point and advance towards hosts, the odds of the triatomine being T. gersteackeri was 0.1% (CI: 1.000413 - 1.001771) more likley than a R. prolixus.
+#quick summary table 
+NEGATIVESparticipated %>% 
+  tbl_summary(include = c(KBParticipatingsec, KBactivesec, VIDEOkbOnBothSidesY1N0, TimeSpentNearChicken, TimeSpentNearDog, TimeSpentNearHuman, TimeSpentNearEmpty, Species),
+              type = c(KBParticipatingsec, KBactivesec, TimeSpentNearDog,TimeSpentNearChicken,TimeSpentNearHuman) ~ "continuous",
+              statistic = all_continuous() ~ "{mean} ± {sd}",
+              by=Species,
+              label = list(KBParticipatingsec ~ "Seconds until advancing towards hosts",
+                          KBactivesec ~ "Seconds spent advancing towards hosts",
+                          TimeSpentNearChicken ~ "Seconds spent near chicken",
+                          TimeSpentNearDog ~ "Seconds spent near dog",
+                          TimeSpentNearHuman ~ "Seconds spent near human",
+                          TimeSpentNearEmpty ~ "Seconds spent near empty chamber",
+                          VIDEOkbOnBothSidesY1N0 ~ "Explored both sides of olfactometer"),
+              missing = "no")  %>%
+              add_p()  %>%
+              add_n() %>%
+              bold_labels() %>%
+              modify_header(list(label ~ "", 
+                                all_stat_cols() ~ "*{level}*, N = {n}")) %>%
+              bold_p() %>%
+              as_gt()%>%
+              gt::tab_options(table.font.names = "Times New Roman", 
+                          table.font.color = "black")
+```
+Similar to previous questions, we wanted to test if there was behavioral differences between the triatomine species. We investigated metrics surrounding "time spent" to test if there were significant associations bewteen these time spent metrics and either of the triatomine species. We found a significant positive association between T. gersteackeri and the time it took for individuals to begin advancing towards hosts. And compared to R. prolixus we found that for every additional second that it took for the triatomines to leave the starting point and advance towards hosts, the odds of the triatomine being T. gersteackeri was 0.1% (CI: 1.000413 - 1.001771) more likley than a R. prolixus. Therefore, T. gersteackeri took longer to leave the starting point and advance towards hosts than R. prolixus. Moreover, we found that R. prolixus explored both sides of the olfactometer more often than T. gersteackeri. In conert these results could highlight that R. prolixus are more prone to taking risks by being more active in the presence of hosts. 
+```{r HOST CUES}
+### HOST CUES.... are abiotic factors emitted from hosts associated with triatomines choosing a host type across all triatomines excpet for those that never left the starting point. Testing three separate models for triatomines choosing dogs, chickens, or humans. Response variables are 0 = the triatomine did not choose that corresponding host and 1 = the triatomine did choose that corresponding host in that trial.
+
+#Testing dogs
+dogmod<-glm(dog~ DogHeightcm + DogWeightkg + AverageDogCO2 + AverageDogHumidity + AverageDogTemp-1, data = ExcludeNeverLeft, family = "binomial")
+summary(dogmod)#Model interpretation: Higher humidity is significantly associated with triatomines choosing dogs, but nothing else, not even the dogs size.
+
+#Verifying that larger dogs arent producing more humidity
+hist(ExcludeNeverLeft$AverageDogHumidity) #normalish
+summary(glm(AverageDogHumidity~ DogHeightcm + DogWeightkg, data = ExcludeNeverLeft)) # no, larger dogs are not associated with more humidity
+
+#calculating odds ratios and confidence intervals around those ratios 
+exp(dogmod$coefficients) #1 is the 0, so coefficients over one is positive and under one is negative
+exp(confint(dogmod)) 
+(exp(dogmod$coefficients)-1)*100 # to get it to a percentage
+# Odds ratio's interpretation : For every additional humidity percentage the odds of a triatomine choosing a dog was 3.8% more likley than to not choose dogs.
+
+#Testing chickens
+summary(glm(chicken~ ChickenHeightcm + ChickenWeightkg + AverageChickenCO2+ AverageChickenHumidity+ AverageChickenTemp-1, data = ExcludeNeverLeft, family = "binomial")) #Model interpretation: There are no host qualities or abiotic factors significanlty associated with triaomines choosing them. 
+
+#testing humans
+summary(glm(human~ HumanHeightcm + HumanWeightkg + AverageHumanCO2 + AverageHumanHumidity + AverageHumanTemp-1, data = ExcludeNeverLeft, family = "binomial")) #Model interpretation: There are no host qualities or abiotic factors significanlty associated with triaomines choosing them. 
+
+###testing the same question, but comparing only trials of T. gersteackeri and excluding the R. prolixus to verify that the patterns are not dependent on triatomien species
+summary(glm(dog~ DogHeightcm + DogWeightkg + AverageDogCO2 + AverageDogHumidity + AverageDogTemp-1, data = ExcludingNeverLeftTGER, family = "binomial")) #Model interpretation: Same as with all species...Higher humidity is significantly associated with triatomines choosing dogs
+
+summary(glm(chicken~ ChickenHeightcm + ChickenWeightkg + AverageChickenCO2+ AverageChickenHumidity+ AverageChickenTemp-1, data = ExcludingNeverLeftTGER, family = "binomial")) #Model interpretation: Same with all species...There are no host qualities or abiotic factors significanlty associated with triaomines choosing them. 
+summary(glm(human~ HumanHeightcm + HumanWeightkg + AverageHumanCO2 + AverageHumanHumidity + AverageHumanTemp-1, data = ExcludingNeverLeftTGER, family = "binomial")) #Model interpretation: Same with all species...There are no host qualities or abiotic factors significanlty associated with triaomines choosing them. 
+
+
+#Are abiotic outputs different across the hosts, for only the triaotmines that committed to one of the hosts... CO2 IS SIGNIFICANTLY DIFFERENT BETWEEN HOST TYPES USE FOR MANUSCRIPT
+HostCues %>% 
+  filter(Outcome == "Chicken" | Outcome == "Dog" | Outcome == "Human")  %>%
+  mutate(Outcome = factor(Outcome))  %>%
+  droplevels()  %>%
+  tbl_summary(include = c(Outcome, AverageTemp, AverageHumidity, AverageCO2),
+              by = Outcome,
+              type = c(AverageTemp, AverageHumidity, AverageCO2) ~ "continuous",
+              statistic = all_continuous() ~ "{mean} ± {sd}",
+              missing = "no",
+              label = c(AverageTemp ~ "Mean Temperature °C", AverageCO2 ~ "Mean CO@2~ ppm", AverageHumidity ~ "Average Humidity %")) %>%
+              modify_header(label ~ "") %>%
+              add_n() %>% 
+              add_p() %>%
+              bold_labels() %>%
+              as_gt() %>%
+              gt::tab_options(table.font.names = "Times New Roman", 
+                          table.font.color = "black") %>%
+              gt::text_transform(locations = cells_body(),
+                          fn = function(x) {
+                                             str_replace_all(x,
+                                              pattern = "@",
+                                              replacement = "<sub>") %>% 
+              str_replace_all("~",
+                        "</sub>") })
+```
+Triatomine choices aren't overall because of host abitoic measurements. For triatomines choosing dogs, triatomines chose dogs when they produced more humidity. However, larger dogs did not neccessariliy have higher humidity measurements. However, for every additional humidity percentage emitted from a dog the odds of a triatomine choosing a dog was 3.8% more likley. No other significant associations were found between host cues and triatomines choosing host types. We did find that CO2 is significantly different between host types, where humans have the highest. However, since they were not chosen most often, higher CO2 is not an important predictor of triatomine bloodmeal preference. 
